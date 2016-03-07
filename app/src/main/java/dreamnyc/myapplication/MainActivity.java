@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.recyclerView);
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
-
         mLayoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(mLayoutManager);
         final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
@@ -88,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 );
 
                 c.moveToFirst();
-
-
+                MyListCursorAdapter m = new MyListCursorAdapter(getApplicationContext(), c);
+rv.setAdapter(m);
+                RecyclerView.LayoutManager l = new LinearLayoutManager(getApplicationContext());
+                rv.setLayoutManager(l);
 
                 mHandler.post(new Runnable() {
                     @Override
