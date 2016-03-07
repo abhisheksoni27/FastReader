@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Speed Read</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main_activity2">Main Activity2</string>
+    <string name="title_activity_show_reader">Show Reader</string>
+    <string name="title_activity_reader">Reader</string>
+    <string name="title_activity_chapter_view">Chapter View</string>
+    <string name="title_activity_fast_read">Fast Read</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="speedReadDefaultValue">200</string>
+    <string name="speedReadKey">SpeedReadKey</string>
+    <string name="autosave">AutoSave</string>
+    <string name="autoSaveSummary">Enable this to save your progress automatically.</string>
+    <string name="fontFamily">FontFamily</string>
+    <string name="fontFamilySummary">Select your favorite font.</string>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="saveState">SaveState</string>
+
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <dreamnyc.myapplication.NumberPicker
+        android:defaultValue="200"
+        android:key="@string/speedReadKey"
+        android:negativeButtonText="Cancel"
+        android:positiveButtonText="Done"
+        android:summary="Set the number of words/minute you want."
+        android:title="Speed"></dreamnyc.myapplication.NumberPicker>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/autosave"
+        android:summary="@string/autoSaveSummary"
+        android:title="Auto Save"></SwitchPreference>
+    <ListPreference
+        android:defaultValue="Raleway"
+        android:entries="@array/fontFamily"
+        android:entryValues="@array/fontRes"
+        android:key="@string/fontFamily"
+        android:negativeButtonText="Cancel"
+        android:positiveButtonText="Done"
+        android:summary="@string/fontFamilySummary"
+        android:title="Font Family"></ListPreference>
+</PreferenceScreen>
