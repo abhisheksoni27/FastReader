@@ -5,29 +5,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -51,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private Thread loadBooks;
     private String sortOrder;
     private int i = 0;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar mProgress;
     private Handler mHandler = new Handler();
-    private ListView lvItems;
+    private RecyclerView rv;
     private Context context;
     private SQLiteDatabase writeableDatabase;
 
@@ -65,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
         mProgress.setVisibility(View.INVISIBLE);
         mProgress.setIndeterminate(true);
-        lvItems = (ListView) findViewById(R.id.listView);
+        rv = (RecyclerView) findViewById(R.id.recyclerView);
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
 
+        mLayoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(mLayoutManager);
         final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
                 BookSave.COLUMN_NAME_TITLE,
                 BookSave.COLUMN_NAME_AUTHOR,
@@ -80,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Runnable readBooks = new Runnable() {
             @Override
             public void run() {
+
 
                 final Cursor c = writeableDatabase.query(
                         BookSave.TABLE_NAME,  // The table to query
@@ -93,40 +89,16 @@ public class MainActivity extends AppCompatActivity {
 
                 c.moveToFirst();
 
+
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
 
-                        TodoCursorAdapter todoAdapter = new TodoCursorAdapter(getApplicationContext(), c, 0);
-                        lvItems.setAdapter(todoAdapter);
-                        /*lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent i = new Intent(getApplicationContext(), ShowReader.class);
-                                SQLiteCursor entry = (SQLiteCursor) parent.getItemAtPosition(position);
-                                String send = entry.getString(4);
-                                i.putExtra(BOOK_OBJECT,send);
-                                startActivity(i);
-                            }
-                        });*/
-                        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent i = new Intent(getApplicationContext(), ShowReader.class);
-                                SQLiteCursor entry = (SQLiteCursor) parent.getItemAtPosition(position);
-                                String send = entry.getString(4);
-                                i.putExtra(BOOK_OBJECT, send);
-                                startActivity(i);
-                            }
-                        });
                     }
                 });
             }
         };
-
-
-        loadBooks = new Thread(readBooks);
-        loadBooks.start();
 
         Runnable importFiles = new Runnable() {
             @Override
@@ -232,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
+        loadBooks = new Thread(readBooks);
+        loadBooks.start();
         runImport = new Thread(importFiles);
 
 
@@ -251,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         } else {
-            t = null;
         }
     }
 
@@ -317,49 +290,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class TodoCursorAdapter extends CursorAdapter {
-        public TodoCursorAdapter(Context context, Cursor cursor, int flags) {
-            super(context, cursor, 0);
-        }
-
-        // The newView method is used to inflate a new view and return it,
-        // you don't bind any data to the view at this point.
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return LayoutInflater.from(context).inflate(R.layout.booklist, parent, false);
-        }
-
-        // The bindView method is used to bind all data to a given view
-        // such as setting the text on a TextView.
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-
-            TextView title = (TextView) view.findViewById(R.id.textView);
-            TextView author = (TextView) view.findViewById(R.id.textView2);
-            ImageView cover;
-            cover = (ImageView) view.findViewById(R.id.imageView1);
-
-
-            String titleString = cursor.getString(cursor.getColumnIndexOrThrow("title"));
-            String authorString = cursor.getString(cursor.getColumnIndexOrThrow("author"));
-            String coverString = cursor.getString(3);
-
-
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-            if (coverString != null) {
-
-                Bitmap bitmap = BitmapFactory.decodeFile(coverString, options);
-                cover.setImageBitmap(bitmap);
-            } else {
-                cover.setBackgroundColor(Color.parseColor("#000000"));
-            }
-
-            title.setText(titleString);
-            author.setText(authorString);
-
-
-        }
-    }
 }

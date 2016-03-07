@@ -1,6 +1,9 @@
 package dreamnyc.myapplication;
 
+import android.database.Cursor;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,6 +43,14 @@ public class Book {
 
     public Book(String title) {
         this.title = title;
+    }
+
+    public static Book fromCursor(Cursor c){
+        Gson okay = new Gson();
+       String s = c.getString(c.getColumnIndexOrThrow("bookObject"));
+Book b = okay.fromJson(s,Book.class);
+        return b;
+
     }
 
     public int getLastReadPosition() {
