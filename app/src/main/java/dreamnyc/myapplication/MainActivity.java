@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     private Context context;
     private SQLiteDatabase writeableDatabase;
+    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mProgress.setVisibility(View.INVISIBLE);
         mProgress.setIndeterminate(true);
         rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv.setHasFixedSize(true);
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
         mLayoutManager = new LinearLayoutManager(this);
@@ -89,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
                 c.moveToFirst();
                 MyListCursorAdapter m = new MyListCursorAdapter(getApplicationContext(), c);
 rv.setAdapter(m);
+                gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+                rv.setLayoutManager(gaggeredGridLayoutManager);
                 RecyclerView.LayoutManager l = new LinearLayoutManager(getApplicationContext());
-                rv.setLayoutManager(l);
+
+
 
                 mHandler.post(new Runnable() {
                     @Override
@@ -203,13 +209,9 @@ rv.setAdapter(m);
 
             }
         };
-
-
         loadBooks = new Thread(readBooks);
         loadBooks.start();
         runImport = new Thread(importFiles);
-
-
     }
 
 
@@ -228,18 +230,10 @@ rv.setAdapter(m);
         } else {
         }
     }
-
     public void cl(String str) {
         Log.d("Okay", str);
 
     }
-
-    public void clI(Integer i) {
-        Log.d("Number", Integer.toString(i));
-
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -261,8 +255,6 @@ rv.setAdapter(m);
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
     public void addFiles() {
         String path = getExternalFilesDir(null).toString();
         cl(path);

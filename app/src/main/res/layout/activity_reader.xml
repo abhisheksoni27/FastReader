@@ -7,10 +7,10 @@
     tools:context="dreamnyc.myapplication.ShowReader">
 
 
-    <ListView
-        android:id="@+id/spine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chapterList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 </RelativeLayout>

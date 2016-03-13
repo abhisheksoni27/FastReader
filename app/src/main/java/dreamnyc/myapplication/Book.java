@@ -144,13 +144,12 @@ Book b = okay.fromJson(s,Book.class);
 
     public boolean getContents(String path, String ed) {
 
-
-        Log.d("Path", path);
-        setOPFFile(path);
-        int TOCFLAG = 0;
-        int COVERFLAG = 0;
-        String[] rootPath = path.split("/");
+        int TOCFLAG = 0 ,COVERFLAG = 0;
         String rootpath = "";
+
+        setOPFFile(path);
+
+        String[] rootPath = path.split("/");
         for (int j = 0; j < rootPath.length - 1; j++) {
             rootpath = rootpath + "/" + rootPath[j];
 

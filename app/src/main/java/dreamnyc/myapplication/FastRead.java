@@ -35,7 +35,7 @@ public class FastRead extends AppCompatActivity {
         setContentView(R.layout.activity_fast_read);
 
         SharedPreferences s1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        speed = s1.getInt(getString(R.string.speedReadKey), Integer.valueOf(getString(R.string.speedReadDefaultValue)));
+        speed = s1.getInt(getString(R.string.speedReadKey), speed);
         fastReadView = (TextView) findViewById(R.id.FastReadView);
         playPause = (Button) findViewById(R.id.playPause);
         setSpeed = (SeekBar) findViewById(R.id.seekBar);
