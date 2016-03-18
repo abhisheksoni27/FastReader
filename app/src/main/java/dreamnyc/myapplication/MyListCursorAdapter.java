@@ -51,7 +51,7 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
             titleTextView =(TextView)view.findViewById(R.id.titleTextView);
             mImageView = (ImageView) view.findViewById(R.id.mImageView);
             cv = (CardView)view.findViewById(R.id.view);
-            view.setOnClickListener(new View.OnClickListener() {
+            cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent goToReader = new Intent(view.getContext(),ShowReader.class);

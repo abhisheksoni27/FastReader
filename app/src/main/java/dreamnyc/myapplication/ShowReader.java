@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 
 import com.google.gson.Gson;
 
@@ -54,28 +55,33 @@ public class ShowReader extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.chapterList);
         recyclerView.setHasFixedSize(true);
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        DisplayMetrics DM = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(DM);
+
+        int num = 2;
+
+        if (DM.widthPixels % 100 >= 0) {
+            int dpi = (int) Math.floor(DM.density);
+            num = Math.abs(DM.widthPixels / (100 * dpi));
+        }
+
+
+
+
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(num, 1);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
-        List<String> gaggeredList = gotIt.getSpine();
+        gaggeredList = gotIt.getSpine();
         chapterListViewAdapter rcAdapter = new chapterListViewAdapter(getApplicationContext(), gaggeredList);
         recyclerView.setAdapter(rcAdapter);
 
 
-        /*
-
-
-                String i = your_array_list.get(position);
-                Log.d("Okay Sent i", i);
-                String urlSent = gotIt.findInSpine(i, gotIt);
-                Log.d("Okay URL RECIEVED okay", urlSent + "");
-                Intent read = new Intent(getApplicationContext(), FastRead.class);
-                read.putExtra("CHAPTERURL", urlSent);
-                read.putExtra("BOOKOBJECT", toBeParsed);
-                read.putExtra("CHAPTERNAME", i);
-                startActivity(read);
-
-        */
-
     }
 
+    public String[] onClickCalled(int i1) {
+        String i = gaggeredList.get(i1);
+        String urlSent = gotIt.findInSpine(i, gotIt);
+        String s = toBeParsed;
+        String[] a = {s, urlSent};
+        return a;
+    }
 }

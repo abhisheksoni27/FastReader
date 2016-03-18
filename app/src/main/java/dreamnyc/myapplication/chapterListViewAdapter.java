@@ -1,6 +1,7 @@
 package dreamnyc.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,31 @@ public class chapterListViewAdapter extends RecyclerView.Adapter<SolventViewHold
         this.itemList = itemList;
         this.context = context;
     }
+
     @Override
     public SolventViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_list, null);
         SolventViewHolders rcv = new SolventViewHolders(layoutView);
         return rcv;
     }
+
     @Override
-    public void onBindViewHolder(SolventViewHolders holder, final int position) {
+    public void onBindViewHolder(final SolventViewHolders holder, final int position) {
         holder.chapterName.setText(itemList.get(position).toString());
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] gotBackFromActivity = ((ShowReader)holder.cv.getContext()).onClickCalled(position);
+                Intent read = new Intent(holder.cv.getContext(), FastRead.class);
+                read.putExtra("CHAPTERURL",gotBackFromActivity[1]);
+                read.putExtra("BOOKOBJECT", gotBackFromActivity[0]);
+                read.putExtra("CHAPTERNAME", holder.chapterName.getText());
+                holder.cv.getContext().startActivity(read);
+            }
+        });
 
     }
+
     @Override
     public int getItemCount() {
         return this.itemList.size();

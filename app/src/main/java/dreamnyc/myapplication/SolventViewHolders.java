@@ -18,6 +18,7 @@ public class SolventViewHolders extends RecyclerView.ViewHolder{
         super(itemView);
         cv=(CardView)itemView.findViewById(R.id.view2);
         chapterName = (TextView) itemView.findViewById(R.id.chapterListItem);
+
     }
 
 }

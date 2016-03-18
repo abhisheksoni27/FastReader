@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 
@@ -36,18 +35,16 @@ public class MainActivity extends AppCompatActivity {
     BookSave myDb;
     private ArrayList gotAnEpub = new ArrayList();
     private ArrayList nameFiles = new ArrayList();
-    private ArrayList<Book> books = new ArrayList<>();
     private HelperFunctions hf = new HelperFunctions();
-    private ExtractChapters ec = new ExtractChapters();
     private Thread runImport;
     private Thread loadBooks;
     private String sortOrder;
     private int i = 0;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ProgressBar mProgress;
     private Handler mHandler = new Handler();
-    private RecyclerView rv;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private CustomRecyclerView rv;
     private Context context;
     private SQLiteDatabase writeableDatabase;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
@@ -57,10 +54,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        mProgress = (ProgressBar) findViewById(R.id.progressBar);
-        mProgress.setVisibility(View.INVISIBLE);
-        mProgress.setIndeterminate(true);
-        rv = (RecyclerView) findViewById(R.id.recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        rv = (CustomRecyclerView) findViewById(R.id.recyclerView);
         rv.setHasFixedSize(true);
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
@@ -73,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
                 BookSave.COLUMN_NAME_BOOK_OBJECT};
         sortOrder = BookSave.COLUMN_NAME_ENTRY_ID + " DESC";
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                runThread(runImport);
+            }
+        });
 
         Runnable readBooks = new Runnable() {
             @Override
@@ -91,19 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
                 c.moveToFirst();
                 MyListCursorAdapter m = new MyListCursorAdapter(getApplicationContext(), c);
-rv.setAdapter(m);
+                rv.setAdapter(m);
                 gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
                 rv.setLayoutManager(gaggeredGridLayoutManager);
-                RecyclerView.LayoutManager l = new LinearLayoutManager(getApplicationContext());
-
-
-
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
             }
         };
 
@@ -200,7 +191,6 @@ rv.setAdapter(m);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mProgress.setVisibility(View.INVISIBLE);
                         finish();
                         startActivity(getIntent());
                     }
@@ -218,22 +208,15 @@ rv.setAdapter(m);
     public void runThread(Thread t) {
         if (t.getState() == Thread.State.NEW) {
             t.start();
-
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mProgress.setVisibility(View.VISIBLE);
-                }
-            });
-
-
         } else {
         }
     }
+
     public void cl(String str) {
         Log.d("Okay", str);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -247,6 +230,7 @@ rv.setAdapter(m);
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.new_game:
+                swipeRefreshLayout.setRefreshing(true);
                 runThread(runImport);
                 return true;
             case R.id.action_settings:
@@ -255,6 +239,7 @@ rv.setAdapter(m);
                 return super.onOptionsItemSelected(item);
         }
     }
+
     public void addFiles() {
         String path = getExternalFilesDir(null).toString();
         cl(path);
