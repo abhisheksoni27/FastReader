@@ -12,13 +12,14 @@ public class SolventViewHolders extends RecyclerView.ViewHolder{
 
     public TextView chapterName;
     public CardView cv;
+    public View seperatorChapter;
 
 
     public SolventViewHolders(View itemView) {
         super(itemView);
         cv=(CardView)itemView.findViewById(R.id.view2);
         chapterName = (TextView) itemView.findViewById(R.id.chapterListItem);
-
+seperatorChapter =itemView.findViewById(R.id.separatorChapter);
     }
 
 }

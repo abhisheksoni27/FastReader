@@ -24,4 +24,12 @@
         <item>Sans-serif</item>
 
     </string-array>
+
+    <integer-array name="swipeRefreshColors">
+        <item>@color/turquoise</item>
+        <item>@color/red</item>
+        <item>@color/blue</item>
+        <item>@color/beige</item>
+        <item>@color/darkTurquoise</item>
+    </integer-array>
 </resources>

@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="turquoise">#1DE9B6</color>
+    <color name="red">#FFA69E</color>
+    <color name="blue">#457B9D</color>
+    <color name="beige">#F1FAEE</color>
+    <color name="darkTurquoise">#84DC</color>
 </resources>

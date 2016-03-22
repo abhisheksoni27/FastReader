@@ -1,6 +1,7 @@
 package dreamnyc.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
+import android.view.View;
 
 import com.google.gson.Gson;
 
@@ -20,7 +22,7 @@ public class ShowReader extends AppCompatActivity {
     BookSave myDb;
     private SQLiteDatabase writeableDatabase;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
-
+private View seperatorChapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,10 @@ public class ShowReader extends AppCompatActivity {
         Gson parserJson = new Gson();
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
+        seperatorChapter=findViewById(R.id.separatorChapter);
         final String title = i.getStringExtra("BOOK_NAME");
+        SharedPreferences sharedPreferences = getSharedPreferences("LAST_READ",MODE_PRIVATE);
+        sharedPreferences.edit().putString("LAST_READ_BOOK_NAME",title).commit();
         String[] a = {title};
         final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
                 BookSave.COLUMN_NAME_TITLE,
@@ -68,11 +73,12 @@ public class ShowReader extends AppCompatActivity {
 
 
 
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(num, 1);
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
         gaggeredList = gotIt.getSpine();
         chapterListViewAdapter rcAdapter = new chapterListViewAdapter(getApplicationContext(), gaggeredList);
         recyclerView.setAdapter(rcAdapter);
+
 
 
     }

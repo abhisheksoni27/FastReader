@@ -21,5 +21,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="saveState">SaveState</string>
+    <string name="title_activity_read_now">Read</string>
 
 </resources>
