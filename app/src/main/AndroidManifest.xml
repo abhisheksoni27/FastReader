@@ -18,7 +18,7 @@
         <activity
             android:name=".ShowReader"
             android:label="@string/title_activity_reader"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".ChapterView"
             android:label="@string/title_activity_chapter_view"
