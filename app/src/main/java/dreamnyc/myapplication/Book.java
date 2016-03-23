@@ -1,7 +1,6 @@
 package dreamnyc.myapplication;
 
 import android.database.Cursor;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -45,10 +44,10 @@ public class Book {
         this.title = title;
     }
 
-    public static Book fromCursor(Cursor c){
+    public static Book fromCursor(Cursor c) {
         Gson okay = new Gson();
-       String s = c.getString(c.getColumnIndexOrThrow("bookObject"));
-Book b = okay.fromJson(s,Book.class);
+        String s = c.getString(c.getColumnIndexOrThrow("bookObject"));
+        Book b = okay.fromJson(s, Book.class);
         return b;
 
     }
@@ -144,7 +143,7 @@ Book b = okay.fromJson(s,Book.class);
 
     public boolean getContents(String path, String ed) {
 
-        int TOCFLAG = 0 ,COVERFLAG = 0;
+        int TOCFLAG = 0, COVERFLAG = 0;
         String rootpath = "";
 
         setOPFFile(path);
@@ -172,8 +171,8 @@ Book b = okay.fromJson(s,Book.class);
             String b = doc.getElementsByTagName("dc:creator").item(0).getTextContent();
             setTitle(a);
             setAuthor(b);
-            NodeList nodes = doc.getElementsByTagName("item");
-            NodeList nodeSpine = doc.getElementsByTagName("itemref");
+            NodeList nodes = doc.getElementsByTagName("item"); //items
+            NodeList nodeSpine = doc.getElementsByTagName("itemref"); //only idref
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
@@ -191,25 +190,19 @@ Book b = okay.fromJson(s,Book.class);
 
                 }
 
-
             }
 
-            for (int k = 0; k < nodeSpine.getLength(); k++) {
-                String t = "";
-                t = nodeSpine.item(k).getAttributes().getNamedItem("idref").getNodeValue();
-                Spine.add(t);
-
-                for (int z = 0; z < nodes.getLength(); z++) {
-                    Element spineElement = (Element) nodes.item(z);
-                    String t1 = spineElement.getAttribute("id");
-
-                    if (t == t1) {
-                        String opfRemoved = getOPFFile().substring(0, getOPFFile().lastIndexOf("/") + 1);
-                        String pathHTML = spineElement.getAttribute("href");
-                        SpinePath.add(opfRemoved + pathHTML);
-                        SpineExtension = pathHTML.substring(pathHTML.lastIndexOf("."));
-                    }
+            for (int k = 0; k < nodes.getLength(); k++) {
+                Element spineElement = (Element) nodes.item(k); //all items
+                String t = spineElement.getAttribute("media-type");
+                String opfRemoved = getOPFFile().substring(0, getOPFFile().lastIndexOf("/") + 1);
+                if (t.contains("application/xhtml+xml")) {
+                    Spine.add(spineElement.getAttribute("id"));
+                    String pathHTML = spineElement.getAttribute("href");
+                    SpinePath.add(opfRemoved + pathHTML);
+                    SpineExtension = pathHTML.substring(pathHTML.lastIndexOf("."));
                 }
+
             }
 
         } catch (ParserConfigurationException e) {
@@ -223,22 +216,10 @@ Book b = okay.fromJson(s,Book.class);
         return true;
     }
 
-    String findInSpine(String s, Book b) {
-        Log.d("Okay" + Math.random() + "Okay", s);
-        char ch = '.';
+    String findInSpine(int i, Book b) {
+        String s = "";
         ArrayList spine = b.getSpinePath();
-        s = b.getSpinePath().get(0).toString().substring(0, b.getSpinePath().get(0).toString().lastIndexOf("/") + 1) + s + getSpineExtension();
-        for (int i = 0; i < spine.size(); i++) {
-
-            String test = spine.get(i).toString();
-            Log.d("Test inside for okay", test + "");
-            if (test.contains(s) && test.indexOf(s) > 0 && test.charAt(test.indexOf(s) + s.length()) == ch) {
-
-                s = b.getSpinePath().get(i).toString();
-            }
-
-
-        }
+        s = spine.get(i).toString();
         return s;
     }
 

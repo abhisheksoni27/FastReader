@@ -4,15 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="dreamnyc.myapplication.FastRead">
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/FastReadView"
-        android:layout_alignEnd="@+id/FastReadView"
-        android:layout_alignRight="@+id/FastReadView" />
+    tools:context="dreamnyc.myapplication.FastRead"
+    android:id="@+id/hideShow">
 
     <TextView
         android:id="@+id/FastReadView"
@@ -23,31 +16,55 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/playPause"
+    <android.support.v7.widget.Toolbar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/view3"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" >
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reverse"
+            android:background="@drawable/ic_fast_rewind_24dp"
+
+            android:padding="25dp" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/speed"
+        android:background="@drawable/ic_trending_up_24dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Play/Pause" />
+        android:padding="25dp" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="49dp"
-        android:max="500"
-        android:minHeight="50dp" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playPause"
+            android:background="@drawable/ic_pause_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:padding="25dp" />
 
-    <TextView
-        android:id="@+id/setSpeedShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBar"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/darkMode"
+            android:background="@drawable/ic_brightness_4_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:padding="25dp" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fastForward"
+            android:background="@drawable/ic_fast_forward_24dp"
+
+            android:padding="25dp" />
+
+
+    </android.support.v7.widget.Toolbar>
+
 
 </RelativeLayout>

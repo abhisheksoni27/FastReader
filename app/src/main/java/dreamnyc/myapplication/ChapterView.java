@@ -21,8 +21,7 @@ public class ChapterView extends AppCompatActivity {
         WebView wv = (WebView) findViewById(R.id.webView);
         Gson parserJson = new Gson();
         String chapter = i.getStringExtra("CHAPTERURL");
-        String toBeParsed = i.getStringExtra("CHAPTERNAME");
-        Log.d("Spine", toBeParsed);
+        String toBeParsed = i.getStringExtra("BOOKOBJECT");
         final Book gotIt = parserJson.fromJson(toBeParsed, Book.class);
         Boolean extension1 = gotIt.getSpineExtension().contains(".html");
         Boolean extension2 = gotIt.getSpineExtension().contains(".xhtml");

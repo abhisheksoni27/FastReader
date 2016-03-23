@@ -40,25 +40,48 @@ private View seperatorChapter;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_parent);
-
+        Intent i = getIntent();
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        Gson parserJson = new Gson();
+        myDb = new BookSave(getApplicationContext());
+        writeableDatabase = myDb.getReadableDatabase();
+        final String title = i.getStringExtra("BOOK_NAME");
+        String[] a = {title};
+        final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
+                BookSave.COLUMN_NAME_TITLE,
+                BookSave.COLUMN_NAME_AUTHOR,
+                BookSave.COLUMN_NAME_COVER_PATH,
+                BookSave.COLUMN_NAME_BOOK_OBJECT};
 
+        final Cursor c = writeableDatabase.query(
+                BookSave.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                "title=?",
+                a,                                     // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                               // The sort order
+        );
+
+
+        c.moveToFirst();
+        toBeParsed = c.getString(c.getColumnIndexOrThrow(BookSave.COLUMN_NAME_BOOK_OBJECT));
+        gotIt = parserJson.fromJson(toBeParsed, Book.class);
+        gaggeredList = gotIt.getSpine();
 
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ChapterList(), "ONE");
-        adapter.addFragment(new QuoteList(), "TWO");
-        adapter.addFragment(new ReviewList(), "THREE");
+        adapter.addFragment(new ChapterList(), "Table of Contents");
         viewPager.setAdapter(adapter);
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -90,10 +113,8 @@ private View seperatorChapter;
         }
     }
 
-
     public String[] onClickCalled(int i1) {
-        String i = gaggeredList.get(i1);
-        String urlSent = gotIt.findInSpine(i, gotIt);
+        String urlSent = gotIt.findInSpine(i1, gotIt);
         String s = toBeParsed;
         String[] a = {s, urlSent};
         return a;

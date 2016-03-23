@@ -265,8 +265,6 @@ public class MainActivity extends AppCompatActivity {
                     book.setPath(path);
                     book.getContents(path + opfPath, getExternalFilesDir(null).getAbsolutePath());
                     Gson gs = new Gson();
-
-                    System.out.println(gs.toJson(book.getSpinePath()));
                     final SQLiteDatabase writeableDatabase = myDb.getWritableDatabase();
                     ContentValues insertValues = new ContentValues();
                     insertValues.put("_id", Math.random());
