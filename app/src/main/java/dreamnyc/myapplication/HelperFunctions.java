@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -27,7 +28,7 @@ import java.util.zip.ZipInputStream;
  */
 public class HelperFunctions {
 
-    public static void unpack(String zipFile, String location) throws IOException {
+    public static void unpack(String zipFile, String location) {
         int size;
         int BUFFER_SIZE = 1024;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -42,7 +43,7 @@ public class HelperFunctions {
             }
             ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile), BUFFER_SIZE));
             try {
-                ZipEntry ze = null;
+                ZipEntry ze;
                 while ((ze = zin.getNextEntry()) != null) {
                     String path = location + ze.getName();
                     File unzipFile = new File(path);
@@ -195,6 +196,34 @@ public class HelperFunctions {
         Log.d("Okay", str);
 
     }
+
+//    public void addFiles() {
+//        String path = getExternalFilesDir(null).toString();
+//        cl(path);
+//        File f = new File(path);
+//        File file[] = f.listFiles();
+//
+//        for (int i = 0; i < file.length; i++) {
+//            nameFiles.add(file[i]);
+//        }
+//    }
+//
+//    public void showFiles(ArrayList nameFiles) {
+//
+//        String path = getExternalFilesDir(null).toString();
+//        int j = 0;
+//        for (j = 0; j < nameFiles.size(); j++) {
+//            path = nameFiles.get(j).toString();
+//            cl("PATH: " + path);
+//
+//            File f = new File(path + "/");
+//            File file[] = f.listFiles();
+//            Filewalker fw = new Filewalker();
+//            fw.walk(f);
+//        }
+//
+//
+//    }
 
 
 }

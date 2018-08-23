@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -17,14 +16,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import Activities.ShowReader;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import dreamnyc.myapplication.Book;
 import dreamnyc.myapplication.R;
-import Activities.ShowReader;
 
 
-public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
+public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorAdapter.ViewHolder> {
 
     private static final String TAG = "MyListCursorAdapter";
 
@@ -38,8 +37,9 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         ViewHolder vh = new ViewHolder(itemView);
         return vh;
     }
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         Book myListItem = Book.fromCursor(cursor);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -62,21 +62,22 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.
 
         public ViewHolder(final View view) {
             super(view);
+
             WindowManager wm = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
-            DisplayMetrics DM=new DisplayMetrics();
+            DisplayMetrics DM = new DisplayMetrics();
             display.getMetrics(DM);
-            readButton=(Button)view.findViewById(R.id.readButton);
-            seperator=view.findViewById(R.id.separator);
+
+
+            readButton = (Button) view.findViewById(R.id.readButton);
             titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-            insideCard=(LinearLayout)view.findViewById(R.id.insideCard);
-            insideCard.getLayoutParams().width=(DM.widthPixels/2)-24;
-            authorTextView=(TextView)view.findViewById(R.id.authorTextView);
+            insideCard = (LinearLayout) view.findViewById(R.id.insideCard);
+            authorTextView = (TextView) view.findViewById(R.id.authorTextView);
             cv = (CardView) view.findViewById(R.id.view);
-            Typeface light = Typeface.createFromAsset(titleTextView.getResources().getAssets(), "fonts/light.ttf");
-            titleTextView.setTypeface(light);
-            Typeface regular = Typeface.createFromAsset(authorTextView.getResources().getAssets(),"fonts/thinItalic.ttf");
-            authorTextView.setTypeface(regular);
+            seperator = view.findViewById(R.id.separator);
+
+
+            insideCard.getLayoutParams().width = (DM.widthPixels / 2) - 24;
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -86,16 +87,16 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                 }
             });
 
-setWidth((DM.widthPixels/2)-24);
+            setWidth((DM.widthPixels / 2) - 24);
         }
-        public void setWidth(int a){
-            a=a-8*4;
-            readButton.getLayoutParams().width=a;
-            seperator.getLayoutParams().width=a;
+
+        public void setWidth(int a) {
+            a = a - 8 * 4;
+            readButton.getLayoutParams().width = a;
+            seperator.getLayoutParams().width = a;
 
         }
     }
-
 
 
     public static int calculateInSampleSize(

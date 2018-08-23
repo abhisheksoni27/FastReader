@@ -29,7 +29,7 @@ public class NumberPicker extends DialogPreference {
         super.onBindDialogView(view);
 
         String[] s = getContext().getResources().getStringArray(R.array.speedArray);
-        np = (android.widget.NumberPicker) view.findViewById(R.id.numberPicker);
+        np = view.findViewById(R.id.numberPicker);
         np.setDisplayedValues(s);
         np.setMinValue(0);
         np.setMaxValue(s.length - 1);

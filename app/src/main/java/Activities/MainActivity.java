@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-
 import com.google.gson.Gson;
 
 import org.jsoup.Jsoup;
@@ -47,22 +46,90 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList nameFiles = new ArrayList();
     private HelperFunctions hf = new HelperFunctions();
     private String sortOrder;
-    private int i = 0;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView rv;
+    private RecyclerView recyclerView;
     private Context context;
     private SQLiteDatabase writeableDatabase;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private MyListCursorAdapter m;
-    private Cursor c;
+    private Cursor cursor;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        init();
+        setupToolbar();
+        setupRefreshLayout();
+
+        recyclerView.setHasFixedSize(true);
+
+        myDb = new BookSave(this);
+        writeableDatabase = myDb.getReadableDatabase();
+
+        runOnLaunch = new Runnable() {
+            @Override
+            public void run() {
+                final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
+                        BookSave.COLUMN_NAME_TITLE,
+                        BookSave.COLUMN_NAME_AUTHOR,
+                        BookSave.COLUMN_NAME_COVER_PATH,
+                        BookSave.COLUMN_NAME_BOOK_OBJECT};
+                sortOrder = BookSave.COLUMN_NAME_ENTRY_ID + " DESC";
+
+                cursor = writeableDatabase.query(
+                        BookSave.TABLE_NAME,  // The table to query
+                        projection,                               // The columns to return
+                        null,
+                        null,                                     // The values for the WHERE clause
+                        null,                                     // don't group the rows
+                        null,                                     // don't filter by row groups
+                        sortOrder                               // The sort order
+                );
+
+                m = new MyListCursorAdapter(getApplicationContext(), cursor);
+                recyclerView.setAdapter(m);
+
+                DisplayMetrics DM = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(DM);
+                gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+                recyclerView.setLayoutManager(gaggeredGridLayoutManager);
+                m.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        };
+        runOnLaunch.run();
+
+
+    }
+
+    private void setupRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new MyTask().execute();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipeRefreshColors));
+    }
+
+    private void init() {
+        toolbar = findViewById(R.id.toolbar);
+        recyclerView = findViewById(R.id.recyclerView);
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
+    }
+
+    private void setupToolbar() {
+        setToolbarMenu(toolbar);
+        toolbar.setTitle("Flying Words");
+        toolbar.inflateMenu(R.menu.menu_main);
+    }
+
+    private void setToolbarMenu(Toolbar toolbar) {
         // Set an OnMenuItemClickListener to handle menu item clicks
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -79,59 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        CharSequence a = "Flying Words";
-        toolbar.setTitle(a);
-        toolbar.inflateMenu(R.menu.menu_main);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new MyTask().execute();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipeRefreshColors));
-        rv = (RecyclerView) findViewById(R.id.recyclerView);
-        rv.setHasFixedSize(true);
-        myDb = new BookSave(this);
-        writeableDatabase = myDb.getReadableDatabase();
-
-        runOnLaunch = new Runnable() {
-            @Override
-            public void run() {
-                final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
-                        BookSave.COLUMN_NAME_TITLE,
-                        BookSave.COLUMN_NAME_AUTHOR,
-                        BookSave.COLUMN_NAME_COVER_PATH,
-                        BookSave.COLUMN_NAME_BOOK_OBJECT};
-                sortOrder = BookSave.COLUMN_NAME_ENTRY_ID + " DESC";
-
-
-                c = writeableDatabase.query(
-                        BookSave.TABLE_NAME,  // The table to query
-                        projection,                               // The columns to return
-                        null,
-                        null,                                     // The values for the WHERE clause
-                        null,                                     // don't group the rows
-                        null,                                     // don't filter by row groups
-                        sortOrder                               // The sort order
-                );
-
-                m = new MyListCursorAdapter(getApplicationContext(), c);
-                rv.setAdapter(m);
-
-                DisplayMetrics DM = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(DM);
-                gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
-                rv.setLayoutManager(gaggeredGridLayoutManager);
-                m.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-
-            }
-        };
-        runOnLaunch.run();
-
-
     }
 
     public void cl(String str) {
@@ -162,34 +176,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addFiles() {
-        String path = getExternalFilesDir(null).toString();
-        cl(path);
-        File f = new File(path);
-        File file[] = f.listFiles();
-
-        for (int i = 0; i < file.length; i++) {
-            nameFiles.add(file[i]);
-        }
-    }
-
-    public void showFiles(ArrayList nameFiles) {
-
-        String path = getExternalFilesDir(null).toString();
-        int j = 0;
-        for (j = 0; j < nameFiles.size(); j++) {
-            path = nameFiles.get(j).toString();
-            cl("PATH: " + path);
-
-            File f = new File(path + "/");
-            File file[] = f.listFiles();
-            Filewalker fw = new Filewalker();
-            fw.walk(f);
-        }
-
-
-    }
-
     private class MyTask extends AsyncTask<Void, Integer, Integer> {
 
         @Override
@@ -206,21 +192,18 @@ public class MainActivity extends AppCompatActivity {
 
             Cursor cur = cr.query(uri, projection, selection, selectionArgs, null);
 
-
             cur.moveToFirst();
 
             while (cur.isAfterLast() == false) {
                 int epubIndex = cur.getString(1).lastIndexOf(".epub");
                 if (epubIndex != -1 && cur.getString(1).endsWith("epub")) {
                     gotAnEpub.add(cur.getString(1));
-                    i += 1;
                 }
 
                 cur.moveToNext();
 
 
             }
-
 
             cur.close();
             int index = 0;
@@ -234,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
                     hf.saveFile(src, dst);
-
 
                     HelperFunctions.unpack(newfile.getPath() + "/" + nameOfTheEpub + ".epub", newfile.getPath() + "/" + nameOfTheEpub + "/");
                     hf.deleteFile(newfile.getPath() + "/" + nameOfTheEpub + ".epub");
@@ -270,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                     insertValues.put("bookObject", gs.toJson(book));
 
                     writeableDatabase.insert("book", null, insertValues);
-                    m = new MyListCursorAdapter(getApplicationContext(), c);
+                    m = new MyListCursorAdapter(getApplicationContext(), cursor);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import Activities.FastRead;
 import dreamnyc.myapplication.R;
@@ -17,7 +20,23 @@ import dreamnyc.myapplication.SolventViewHolders;
 /**
  * Created by abhishek on 13/3/16.
  */
-public class chapterListViewAdapter extends  RecyclerView.ViewHolder {
+public class chapterListViewAdapter extends  RecyclerView.Adapter<chapterListViewAdapter.ViewHolder> {
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView chapterName;
+        public CardView cv;
+        public View seperatorChapter;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            cv = itemView.findViewById(R.id.view2);
+            chapterName = itemView.findViewById(R.id.chapterListItem);
+            seperatorChapter = itemView.findViewById(R.id.separatorChapter);
+        }
+
+    }
+
     private List<String> itemList;
     private Context context;
 
@@ -27,14 +46,15 @@ public class chapterListViewAdapter extends  RecyclerView.ViewHolder {
     }
 
     @Override
-    public SolventViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_list, null);
-        SolventViewHolders rcv = new SolventViewHolders(layoutView);
+        ViewHolder rcv = new ViewHolder(layoutView);
         return rcv;
     }
 
+
     @Override
-    public void onBindViewHolder(final SolventViewHolders holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.chapterName.setText(itemList.get(position).toString());
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override

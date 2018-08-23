@@ -4,24 +4,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import androidx.core.app.Fragment;
-import androidx.core.app.FragmentManager;
-import androidx.core.app.FragmentPagerAdapter;
-import androidx.core.view.ViewPager;
-import dreamnyc.myapplication.Book;
-import dreamnyc.myapplication.BookSave;
-import dreamnyc.myapplication.R;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.viewpager.widget.ViewPager;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.BookSave;
+import dreamnyc.myapplication.R;
 
 public class ShowReader extends AppCompatActivity {
 
