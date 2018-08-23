@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#032835"
-    tools:context="dreamnyc.myapplication.Activities.Splash">
+    tools:context="Activities.Splash">
 
 
     <ImageView

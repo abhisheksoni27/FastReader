@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="dreamnyc.myapplication.Activities.FastRead"
+    tools:context="Activities.FastRead"
     android:id="@+id/hideShow">
 
     <TextView
@@ -16,7 +16,7 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/view3"
@@ -64,7 +64,7 @@
             android:padding="25dp" />
 
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
 </RelativeLayout>

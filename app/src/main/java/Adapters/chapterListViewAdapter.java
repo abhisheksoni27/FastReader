@@ -9,18 +9,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import Activities.FastRead;
+import Activities.ShowReader;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import Activities.FastRead;
 import dreamnyc.myapplication.R;
-import Activities.ShowReader;
-import dreamnyc.myapplication.SolventViewHolders;
 
 /**
  * Created by abhishek on 13/3/16.
  */
-public class chapterListViewAdapter extends  RecyclerView.Adapter<chapterListViewAdapter.ViewHolder> {
+public class chapterListViewAdapter extends RecyclerView.Adapter<chapterListViewAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

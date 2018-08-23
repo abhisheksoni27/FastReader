@@ -1,5 +1,6 @@
 package Activities;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import Adapters.MyListCursorAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         init();
         setupToolbar();
         setupRefreshLayout();
+
+        askForPermissions();
 
         recyclerView.setHasFixedSize(true);
 
@@ -104,7 +109,18 @@ public class MainActivity extends AppCompatActivity {
         };
         runOnLaunch.run();
 
+    }
 
+    private void askForPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) + ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                + ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != 3) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    10);
+
+        }
     }
 
     private void setupRefreshLayout() {
@@ -180,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Integer doInBackground(Void... params) {
-
 
             ContentResolver cr = context.getContentResolver();
             Uri uri = MediaStore.Files.getContentUri("external");
