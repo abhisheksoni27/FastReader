@@ -19,7 +19,7 @@ import dreamnyc.myapplication.R;
 /**
  * Created by abhishek on 13/3/16.
  */
-public class chapterListViewAdapter extends RecyclerView.Adapter<chapterListViewAdapter.ViewHolder> {
+public class ChapterListViewAdapter extends RecyclerView.Adapter<ChapterListViewAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,14 +39,14 @@ public class chapterListViewAdapter extends RecyclerView.Adapter<chapterListView
     private List<String> itemList;
     private Context context;
 
-    public chapterListViewAdapter(Context context, List<String> itemList) {
+    public ChapterListViewAdapter(Context context, List<String> itemList) {
         this.itemList = itemList;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_list, null);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_list_item, null);
         ViewHolder rcv = new ViewHolder(layoutView);
         return rcv;
     }
@@ -54,7 +54,7 @@ public class chapterListViewAdapter extends RecyclerView.Adapter<chapterListView
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.chapterName.setText(itemList.get(position).toString());
+        holder.chapterName.setText(itemList.get(position));
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

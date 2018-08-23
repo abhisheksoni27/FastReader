@@ -3,12 +3,9 @@ package Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -47,11 +44,6 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
 
         public ViewHolder(final View view) {
             super(view);
-
-            WindowManager wm = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            DisplayMetrics DM = new DisplayMetrics();
-            display.getMetrics(DM);
 
             readButton = view.findViewById(R.id.readButton);
             titleTextView = view.findViewById(R.id.titleTextView);

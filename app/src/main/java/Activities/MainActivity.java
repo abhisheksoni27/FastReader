@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Document doc = Jsoup.parse(OPF, "UTF-8");
                     String opfPath = doc.getElementsByTag("rootfile").attr("full-path");
-                    Book book = new Book();
+                    Book book = new Book("");
                     book.setPath(extractLocation);
                     book.getContents(extractLocation + opfPath);
                     Gson gs = new Gson();

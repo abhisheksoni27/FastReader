@@ -141,28 +141,30 @@ public class Book {
         this.path = path;
     }
 
-    public boolean getContents(String opfFilePath) {
+    public boolean getContents(String path) {
 
         int TOCFLAG = 0, COVERFLAG = 0;
-        StringBuilder rootPath = new StringBuilder();
+        String rootpath = "";
 
-        setOPFFile(opfFilePath);
+        setOPFFile(path);
 
-        String[] splittedOpfFilePath = opfFilePath.split("/");
-        for (int j = 0; j < splittedOpfFilePath.length - 1; j++) {
-            rootPath.append("/").append(splittedOpfFilePath[j]);
+        String[] rootPath = path.split("/");
+        for (int j = 0; j < rootPath.length - 1; j++) {
+            rootpath = rootpath + "/" + rootPath[j];
 
         }
+        rootpath = rootpath.substring(1);
 
-        rootPath = new StringBuilder(rootPath.substring(1));
-
+        int lastSlash = rootpath.lastIndexOf("/");
+        String pathroot = rootpath.substring(0, lastSlash + 1);
+        ArrayList<String> contents = new ArrayList<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setIgnoringElementContentWhitespace(true);
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            File file = new File(opfFilePath);
+            File file = new File(path);
             Document doc = builder.parse(file);
             // Do something with the document here.
             String a = doc.getElementsByTagName("dc:title").item(0).getTextContent();
@@ -178,12 +180,12 @@ public class Book {
                 String cover = element.getAttribute("media-type");
                 if (cover.contains("image") && COVERFLAG == 0) {
                     String coverBook = element.getAttribute("href");
-                    setPathOfCover(rootPath + "/" + coverBook);
+                    setPathOfCover(rootpath + "/" + coverBook);
                     COVERFLAG = 1;
 
                 } else if (cover.contains("application/x-dtbncx+xml") && TOCFLAG == 0) {
                     String toc = element.getAttribute("href");
-                    setPathOfTOC(rootPath + "/" + toc);
+                    setPathOfTOC(rootpath + "/" + toc);
                     TOCFLAG = 1;
 
                 }

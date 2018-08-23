@@ -36,6 +36,9 @@
         <activity
             android:name="Activities.ReadNow"
             android:label="@string/title_activity_read_now" />
+        <activity
+            android:name="Activities.ChapterListActivity"
+            android:label="@string/title_activity_read_now" />
     </application>
 
 </manifest>
