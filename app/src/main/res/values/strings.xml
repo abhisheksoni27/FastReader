@@ -22,5 +22,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="saveState">SaveState</string>
     <string name="title_activity_read_now">Read</string>
+    <string name="epub_file_extension">.epub</string>
 
 </resources>

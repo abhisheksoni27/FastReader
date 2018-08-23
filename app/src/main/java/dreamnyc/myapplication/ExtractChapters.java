@@ -18,12 +18,9 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class ExtractChapters {
 
-
-    ArrayList extractChapters(String toc, String opfPath, String name, String rootPath) {
-        HelperFunctions h = new HelperFunctions();
+    public static ArrayList extractChapters(String toc, String opfPath, String name, String rootPath) {
         String path = opfPath.substring(0, opfPath.lastIndexOf("/"));
         ArrayList chapters = new ArrayList();
-
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setIgnoringElementContentWhitespace(true);

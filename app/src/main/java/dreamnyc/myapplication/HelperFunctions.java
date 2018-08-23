@@ -84,7 +84,7 @@ public class HelperFunctions {
         }
     }
 
-    public String buildDocument(String s, String name) {
+    public static String buildDocument(String s, String name) {
         String path = s.substring(0, s.lastIndexOf("/"));
         String code = "Done.";
         File chapter = new File(s);
@@ -126,7 +126,7 @@ public class HelperFunctions {
         return toBeSaved;
     }
 
-    public String fileAsText(String s) {
+    public static String fileAsText(String s) {
         File chapter = new File(s);
         //Get the text file
         File file = new File(s);
@@ -149,7 +149,7 @@ public class HelperFunctions {
         return text.toString();
     }
 
-    public String extractName(String nameOfTheEpub) {
+    public static  String extractName(String nameOfTheEpub) {
         int lastSlashPosition = nameOfTheEpub.lastIndexOf("/") + 1;
         int lastDotPosition = nameOfTheEpub.lastIndexOf(".");
         String name = nameOfTheEpub.substring(lastSlashPosition, lastDotPosition);
@@ -157,7 +157,7 @@ public class HelperFunctions {
         return name;
     }
 
-    public boolean saveFile(File src, File dst) throws IOException {
+    public static boolean saveFile(File src, File dst) throws IOException {
         if (src.getAbsolutePath().toString().equals(dst.getAbsolutePath().toString())) {
 
             return true;
@@ -184,7 +184,7 @@ public class HelperFunctions {
         return true;
     }
 
-    public void deleteFile(String path) {
+    public static void deleteFile(String path) {
 
         File toBeDeleted = new File(path);
         toBeDeleted.delete();
@@ -192,9 +192,8 @@ public class HelperFunctions {
 
     }
 
-    public void cl(String str) {
+    public static void cl(String str) {
         Log.d("Okay", str);
-
     }
 
 //    public void addFiles() {

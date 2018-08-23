@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,32 +29,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import dreamnyc.myapplication.Book;
 import dreamnyc.myapplication.BookSave;
 import dreamnyc.myapplication.Filewalker;
 import dreamnyc.myapplication.HelperFunctions;
-import dreamnyc.myapplication.OPFParsing;
 import dreamnyc.myapplication.R;
-
 
 public class MainActivity extends AppCompatActivity {
     BookSave myDb;
-    private Runnable runOnLaunch;
-    private ArrayList gotAnEpub = new ArrayList();
-    private ArrayList nameFiles = new ArrayList();
-    private HelperFunctions hf = new HelperFunctions();
+    private ArrayList booksList = new ArrayList();
     private String sortOrder;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private Context context;
     private SQLiteDatabase writeableDatabase;
-    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
-    private MyListCursorAdapter m;
+    private MyListCursorAdapter listCursorAdapter;
     private Cursor cursor;
     private Toolbar toolbar;
+    private static final String epub_file_extension = ".epub";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,39 +68,7 @@ public class MainActivity extends AppCompatActivity {
         myDb = new BookSave(this);
         writeableDatabase = myDb.getReadableDatabase();
 
-        runOnLaunch = new Runnable() {
-            @Override
-            public void run() {
-                final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
-                        BookSave.COLUMN_NAME_TITLE,
-                        BookSave.COLUMN_NAME_AUTHOR,
-                        BookSave.COLUMN_NAME_COVER_PATH,
-                        BookSave.COLUMN_NAME_BOOK_OBJECT};
-                sortOrder = BookSave.COLUMN_NAME_ENTRY_ID + " DESC";
-
-                cursor = writeableDatabase.query(
-                        BookSave.TABLE_NAME,  // The table to query
-                        projection,                               // The columns to return
-                        null,
-                        null,                                     // The values for the WHERE clause
-                        null,                                     // don't group the rows
-                        null,                                     // don't filter by row groups
-                        sortOrder                               // The sort order
-                );
-
-                m = new MyListCursorAdapter(getApplicationContext(), cursor);
-                recyclerView.setAdapter(m);
-
-                DisplayMetrics DM = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(DM);
-                gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
-                recyclerView.setLayoutManager(gaggeredGridLayoutManager);
-                m.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-
-            }
-        };
-        runOnLaunch.run();
+        new RunOnLaunch().run();
 
     }
 
@@ -164,11 +125,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void cl(String str) {
-        Log.d("Okay", str);
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -197,13 +153,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... params) {
 
+            /**
+             * ######## Add Epub Books to booksList #######
+             */
             ContentResolver cr = context.getContentResolver();
+
             Uri uri = MediaStore.Files.getContentUri("external");
+
             String[] projection = null;
 
             String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
                     + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE;
-            String[] selectionArgs = null; // there is no ? in selection so null here
+            String[] selectionArgs = null;
 
             Cursor cur = cr.query(uri, projection, selection, selectionArgs, null);
 
@@ -211,43 +172,49 @@ public class MainActivity extends AppCompatActivity {
 
             while (cur.isAfterLast() == false) {
                 int epubIndex = cur.getString(1).lastIndexOf(".epub");
-                if (epubIndex != -1 && cur.getString(1).endsWith("epub")) {
-                    gotAnEpub.add(cur.getString(1));
+                if (epubIndex != -1) {
+                    booksList.add(cur.getString(1));
                 }
 
                 cur.moveToNext();
-
-
             }
 
             cur.close();
-            int index = 0;
-            while (index < gotAnEpub.size()) {
 
-                String nameOfTheEpub = hf.extractName(gotAnEpub.get(index).toString());
-                File src = new File(gotAnEpub.get(index).toString());
-                File dst = new File(getExternalFilesDir(null).getPath() + File.separator + nameOfTheEpub + ".epub");
-                File newfile = new File(getExternalFilesDir(null).getPath());
+            /**
+             * ######## Books added: END #######
+             */
+
+
+            int index = 0;
+            while (index < booksList.size()) {
+
+                String nameOfTheEpub = HelperFunctions.extractName(booksList.get(index).toString());
+                File src = new File(booksList.get(index).toString());
+                File dst = new File(getExternalFilesDir(null).getPath() + File.separator + nameOfTheEpub + epub_file_extension);
+                File newFile = new File(getExternalFilesDir(null).getPath());
 
                 try {
 
-                    hf.saveFile(src, dst);
+                    HelperFunctions.saveFile(src, dst);
 
-                    HelperFunctions.unpack(newfile.getPath() + "/" + nameOfTheEpub + ".epub", newfile.getPath() + "/" + nameOfTheEpub + "/");
-                    hf.deleteFile(newfile.getPath() + "/" + nameOfTheEpub + ".epub");
+                    String fileLocation = newFile.getPath() + File.separator + nameOfTheEpub + epub_file_extension;
+                    String extractLocation = newFile.getPath() + File.separator + nameOfTheEpub + File.separator;
 
-                    String path = newfile.getPath() + "/" + nameOfTheEpub + "/";
+                    // Unpack .epub file
+                    HelperFunctions.unpack(fileLocation, extractLocation);
+                    // Delete file
+                    HelperFunctions.deleteFile(fileLocation);
 
-                    File f = new File(path);
-                    Filewalker fw = new Filewalker();
+                    File f = new File(extractLocation);
+                    Filewalker fileWalker = new Filewalker();
                     File OPF;
-                    OPFParsing opfp = new OPFParsing();
-                    String opf = fw.container(f, "container");
 
+                    String opf = fileWalker.container(f, "container");
 
                     if (opf == "Not  Found") {
-                        OPF = new File(path);
-
+                        index++;
+                        continue;
                     } else {
                         OPF = new File(opf);
                     }
@@ -255,10 +222,10 @@ public class MainActivity extends AppCompatActivity {
                     Document doc = Jsoup.parse(OPF, "UTF-8");
                     String opfPath = doc.getElementsByTag("rootfile").attr("full-path");
                     Book book = new Book();
-                    book.setPath(path);
-                    book.getContents(path + opfPath, getExternalFilesDir(null).getAbsolutePath());
+                    book.setPath(extractLocation);
+                    book.getContents(extractLocation + opfPath);
                     Gson gs = new Gson();
-                    final SQLiteDatabase writeableDatabase = myDb.getWritableDatabase();
+
                     ContentValues insertValues = new ContentValues();
                     insertValues.put("_id", Math.random());
                     insertValues.put("title", Uri.parse(book.getTitle()).toString());
@@ -266,14 +233,16 @@ public class MainActivity extends AppCompatActivity {
                     insertValues.put("cover", book.getPathOfCover());
                     insertValues.put("bookObject", gs.toJson(book));
 
-                    writeableDatabase.insert("book", null, insertValues);
-                    m = new MyListCursorAdapter(getApplicationContext(), cursor);
+                    if (writeableDatabase != null) {
+                        writeableDatabase.insert("book", null, insertValues);
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
 
                 }
-                index += 1;
+                index++;
             }
 
             return 1;
@@ -282,7 +251,37 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
 
-            runOnLaunch.run();
+            new RunOnLaunch().run();
+
+        }
+    }
+
+    private class RunOnLaunch implements Runnable {
+        @Override
+        public void run() {
+            final String[] projection = {BookSave.COLUMN_NAME_ENTRY_ID,
+                    BookSave.COLUMN_NAME_TITLE,
+                    BookSave.COLUMN_NAME_AUTHOR,
+                    BookSave.COLUMN_NAME_COVER_PATH,
+                    BookSave.COLUMN_NAME_BOOK_OBJECT};
+            sortOrder = BookSave.COLUMN_NAME_ENTRY_ID + " DESC";
+
+            cursor = writeableDatabase.query(
+                    BookSave.TABLE_NAME,
+                    projection,
+                    null,
+                    null,
+                    null,
+                    null,
+                    sortOrder
+            );
+
+            listCursorAdapter = new MyListCursorAdapter(getApplicationContext(), cursor);
+            recyclerView.setAdapter(listCursorAdapter);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            listCursorAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
 
         }
     }
