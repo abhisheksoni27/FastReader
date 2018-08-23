@@ -1,9 +1,11 @@
 package dreamnyc.myapplication;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by abhishek on 13/3/16.

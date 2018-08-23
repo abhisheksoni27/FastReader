@@ -1,15 +1,16 @@
 package dreamnyc.myapplication;
 
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ChapterView extends AppCompatActivity {
 

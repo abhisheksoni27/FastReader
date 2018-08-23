@@ -1,14 +1,12 @@
 package dreamnyc.myapplication;
 
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,6 +15,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 public class FastRead extends AppCompatActivity {
     static boolean active = false;
@@ -112,13 +114,13 @@ public class FastRead extends AppCompatActivity {
                     //black
                     hideShow.setBackgroundColor(Color.parseColor("#ffffff"));
                     fastReadView.setTextColor(Color.parseColor("#000000"));
-                    setSpeed.setBackgroundResource(R.drawable.ic_trending_up_24dp);
+                    setSpeed.setBackgroundResource(R.drawable.ic_trending_up_black_24dp);
                     if (flag == 0) {
-                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_black_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     } else {
-                        playPause.setBackgroundResource(R.drawable.ic_pause_circle_outline_24dp);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     }
-                    darkMode.setBackgroundResource(R.drawable.ic_brightness_4_24dp);
+                    darkMode.setBackgroundResource(R.drawable.ic_brightness_4_black_24dp);
 
 
 
@@ -128,13 +130,13 @@ public class FastRead extends AppCompatActivity {
                     hideShow.setBackgroundColor(Color.parseColor("#000000"));
                     fastReadView.setTextColor(Color.parseColor("#ffffff"));
 
-                    setSpeed.setBackgroundResource(R.drawable.ic_trending_up_white_24px);
+                    setSpeed.setBackgroundResource(R.drawable.ic_trending_up_black_24dp);
                     if (flag == 0) {
-                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_white_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     } else {
-                        playPause.setBackgroundResource(R.drawable.ic_pause_circle_outline_white_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     }
-                    darkMode.setBackgroundResource(R.drawable.ic_brightness_4_white_24px);
+                    darkMode.setBackgroundResource(R.drawable.ic_brightness_4_black_24dp);
                     mode = 1;
                 }
 
@@ -217,16 +219,16 @@ public class FastRead extends AppCompatActivity {
                 if (flag == 0) {
                     onPause(chapterName, b.getTitle(), handler1, r);
                     if (mode == 0) {
-                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_black_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_black_24dp);
                     } else {
-                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_white_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_play_circle_outline_black_24dp);
                     }
                 } else if (flag == 1) {
                     onResume(chapterName, b.getTitle());
                     if (mode == 0) {
-                        playPause.setBackgroundResource(R.drawable.ic_pause_circle_outline_24dp);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     } else {
-                        playPause.setBackgroundResource(R.drawable.ic_pause_circle_outline_white_24px);
+                        playPause.setBackgroundResource(R.drawable.ic_pause_black_24dp);
                     }
                     handler1.postDelayed(r, speed);
                 }

@@ -2,18 +2,18 @@ package dreamnyc.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * Created by abhishek on 13/3/16.
  */
-public class chapterListViewAdapter extends RecyclerView.Adapter<SolventViewHolders> {
+public class chapterListViewAdapter extends  RecyclerView.ViewHolder {
     private List<String> itemList;
     private Context context;
 

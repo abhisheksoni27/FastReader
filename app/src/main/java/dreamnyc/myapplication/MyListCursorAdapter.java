@@ -7,22 +7,21 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorAdapter.ViewHolder> {
+
+public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "MyListCursorAdapter";
 
@@ -30,16 +29,14 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
         super(context, cursor);
     }
 
-    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.booklist, parent, false);
         ViewHolder vh = new ViewHolder(itemView);
         return vh;
     }
-
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
         Book myListItem = Book.fromCursor(cursor);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
