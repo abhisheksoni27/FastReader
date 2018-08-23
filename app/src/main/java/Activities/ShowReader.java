@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +9,10 @@ import androidx.core.app.Fragment;
 import androidx.core.app.FragmentManager;
 import androidx.core.app.FragmentPagerAdapter;
 import androidx.core.view.ViewPager;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.BookSave;
+import dreamnyc.myapplication.R;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;

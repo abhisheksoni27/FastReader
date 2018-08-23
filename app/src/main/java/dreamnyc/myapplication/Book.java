@@ -216,7 +216,7 @@ public class Book {
         return true;
     }
 
-    String findInSpine(int i, Book b) {
+    public String findInSpine(int i, Book b) {
         String s = "";
         ArrayList spine = b.getSpinePath();
         s = spine.get(i).toString();

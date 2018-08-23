@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Activities;
 
 
 import android.app.Dialog;
@@ -19,6 +19,10 @@ import com.google.gson.Gson;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.BookSave;
+import dreamnyc.myapplication.HelperFunctions;
+import dreamnyc.myapplication.R;
 
 public class FastRead extends AppCompatActivity {
     static boolean active = false;

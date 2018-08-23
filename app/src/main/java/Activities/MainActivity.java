@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Activities;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 
+import com.google.gson.Gson;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -24,11 +26,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Adapters.MyListCursorAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.BookSave;
+import dreamnyc.myapplication.Filewalker;
+import dreamnyc.myapplication.HelperFunctions;
+import dreamnyc.myapplication.OPFParsing;
+import dreamnyc.myapplication.R;
 
 
 public class MainActivity extends AppCompatActivity {

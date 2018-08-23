@@ -83,7 +83,7 @@ public class HelperFunctions {
         }
     }
 
-    String buildDocument(String s, String name) {
+    public String buildDocument(String s, String name) {
         String path = s.substring(0, s.lastIndexOf("/"));
         String code = "Done.";
         File chapter = new File(s);
@@ -125,7 +125,7 @@ public class HelperFunctions {
         return toBeSaved;
     }
 
-    String fileAsText(String s) {
+    public String fileAsText(String s) {
         File chapter = new File(s);
         //Get the text file
         File file = new File(s);
@@ -148,7 +148,7 @@ public class HelperFunctions {
         return text.toString();
     }
 
-    String extractName(String nameOfTheEpub) {
+    public String extractName(String nameOfTheEpub) {
         int lastSlashPosition = nameOfTheEpub.lastIndexOf("/") + 1;
         int lastDotPosition = nameOfTheEpub.lastIndexOf(".");
         String name = nameOfTheEpub.substring(lastSlashPosition, lastDotPosition);
@@ -156,7 +156,7 @@ public class HelperFunctions {
         return name;
     }
 
-    boolean saveFile(File src, File dst) throws IOException {
+    public boolean saveFile(File src, File dst) throws IOException {
         if (src.getAbsolutePath().toString().equals(dst.getAbsolutePath().toString())) {
 
             return true;

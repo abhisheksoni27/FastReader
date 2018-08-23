@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+import Activities.FastRead;
+import dreamnyc.myapplication.R;
+import Activities.ShowReader;
+import dreamnyc.myapplication.SolventViewHolders;
 
 /**
  * Created by abhishek on 13/3/16.

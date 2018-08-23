@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.R;
+import Activities.ShowReader;
 
 
 public class MyListCursorAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {

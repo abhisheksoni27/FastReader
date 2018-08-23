@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Adapters;
 
 
 import android.content.Context;

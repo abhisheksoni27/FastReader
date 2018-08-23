@@ -1,4 +1,4 @@
-package dreamnyc.myapplication;
+package Activities;
 
 
 import android.content.Intent;
@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
+import dreamnyc.myapplication.Book;
+import dreamnyc.myapplication.R;
 
 public class ChapterView extends AppCompatActivity {
 
