@@ -1,5 +1,7 @@
 package dreamnyc.myapplication;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,10 +19,11 @@ import javax.xml.parsers.ParserConfigurationException;
  * Created by Abhishek on 2/28/2016.
  */
 public class ExtractChapters {
-
+    private static final String TAG = "ExtractChapters";
     public static ArrayList extractChapters(String toc, String opfPath) {
         String path = opfPath.substring(0, opfPath.lastIndexOf("/"));
-        ArrayList chapters = new ArrayList();
+        ArrayList chaptersPathList = new ArrayList();
+        ArrayList chaptersList = new ArrayList();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setIgnoringElementContentWhitespace(true);
@@ -32,7 +35,14 @@ public class ExtractChapters {
             NodeList nodes = doc.getElementsByTagName("content");
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
-                chapters.add(path + "/" + element.getAttribute("src"));
+                String src = element.getAttribute("src");
+                chaptersPathList.add(path + "/" + src);
+
+                if (src.contains(".")) {
+                    Log.d(TAG, "extractChapters: "+src);
+                    chaptersList.add(src.split("[.]")[0]);
+                }
+
             }
 
 
@@ -43,6 +53,6 @@ public class ExtractChapters {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return chapters;
+        return chaptersList;
     }
 }

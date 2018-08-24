@@ -23,6 +23,7 @@ public class ShowReader extends AppCompatActivity {
     private static final String TAG = "ShowReader";
     private String toBeParsed;
     private Book gotIt;
+    private ArrayList<String> chapterPathList;
     private ArrayList<String> chapterList;
     private BookSave myDb;
     private SQLiteDatabase writeableDatabase;
@@ -49,15 +50,14 @@ public class ShowReader extends AppCompatActivity {
 
         toBeParsed = c.getString(c.getColumnIndexOrThrow(BookSave.COLUMN_NAME_BOOK_OBJECT));
         gotIt = parserJson.fromJson(toBeParsed, Book.class);
-        chapterList = ExtractChapters.extractChapters(gotIt.getPathOfTOC(), gotIt.getOPFFile());
-
+        chapterPathList = ExtractChapters.extractChapters(gotIt.getPathOfTOC(), gotIt.getOPFFile());
 
         RecyclerView recyclerView = findViewById(R.id.chapterListItemsContainer);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerView.setAdapter(new ChapterListViewAdapter(this, chapterList));
-        Log.d(TAG, "onCreate: " + chapterList.toString());
+        recyclerView.setAdapter(new ChapterListViewAdapter(this, chapterPathList));
+        Log.d(TAG, "onCreate: " + chapterPathList.toString());
 
     }
 
